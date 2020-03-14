@@ -8,15 +8,18 @@ public class assetdb {
 	private Connection sqlconnection;
 	private Statement sqlstatement;
 	private ResultSet sqlresultset;
-	
+
 	private String dbname;
 	private String tablename;
 
-	/* Constructor to generate new database */
-	public assetdb(final String username, final String password) {
+	public boolean loginSuccess;
+
+	/* Generate new database */
+	public void connect(final String username, final String password) throws SQLException {
 		try {
 			Scanner in = new Scanner(System.in);
 			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", username, password);
+			System.out.println("Login success...");
 			this.sqlstatement = this.sqlconnection.createStatement();
 			System.out.print("Enter new database name> ");
 			this.dbname = in.nextLine();
@@ -31,27 +34,31 @@ public class assetdb {
 			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + this.dbname, username,
 					password);
 			this.sqlstatement = this.sqlconnection.createStatement();
-			System.out.println("Connected to the new datbase...");
+			
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
+		System.out.println("Connected to the new datbase...");
+		this.loginSuccess = true;
 	}
 
-	/* Constructor to connect to existing database */
-	public assetdb(final String database_name, final String table_name, final String username, final String password) {
+	/* Connect to existing database */
+	public void connect(final String database_name, final String table_name, final String username,
+			final String password) throws SQLException {
 		try {
-
-			this.dbname = database_name;
-			this.tablename = table_name;
 			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + this.dbname, username,
 					password);
+			this.dbname = database_name;
+			this.tablename = table_name;
 			this.sqlstatement = this.sqlconnection.createStatement();
 			this.sqlstatement.executeUpdate("USE " + this.dbname);
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
+		System.out.println("Login success...");
 		System.out.println("Connected to datbase...");
+		this.loginSuccess = true;
 	}
 
 	public void write_entry(String id, String date, String type, int price, String status) {
@@ -59,7 +66,7 @@ public class assetdb {
 			String sql = "INSERT INTO " + this.tablename
 					+ " (tag_id, purchase_date, asset_type, price, status) VALUES('" + id + "','" + date + "','" + type
 					+ "'," + price + ",'" + status + "')";
-			//System.out.println(sql);
+			// System.out.println(sql);
 			this.sqlstatement.executeUpdate(sql);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -86,13 +93,7 @@ public class assetdb {
 	}
 
 	public void close_db() throws SQLException {
-		try {
-			this.sqlresultset.close();
-			this.sqlstatement.close();
-			this.sqlconnection.close();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
+		this.sqlresultset.close();
+		this.sqlstatement.close();
 	}
 }
