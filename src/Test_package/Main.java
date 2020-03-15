@@ -1,33 +1,23 @@
 package Test_package;
 
 import db_driver.assetdb;
-import GUI.login_ui;
+import GUI.login_dialog;
 import java.util.Scanner;
 import java.sql.SQLException;
+import GUI.createdb_dialog;
 
 public class Main {
-
 	public static void main(String[] args) throws SQLException {
-
 		Scanner in = new Scanner(System.in);
 		assetdb db1 = new assetdb();
-		login_ui login = new login_ui();
-		
-		login.login();
-		
-		System.out.println("1\t=\tNew Database\n2\t=\tExisting Database");
-		System.out.print("Enter your choice> ");
+		login_dialog login = new login_dialog();
+		createdb_dialog choice = new createdb_dialog();
 
-		if (in.nextInt() == 1) {
-			db1.connect(login.getUsername(), login.getPassword());
-		} else {
-			System.out.print("Enter database name> ");
-			String db = in.next();
-			System.out.print("Enter table name> ");
-			String table = in.next();
-			System.out.print("Enter user name> ");
-			db1.connect(db, table, login.getUsername(), login.getPassword());
-		}
+		login.showDialog();
+		db1.setCreds(login.getUsername(), login.getPassword());
+		choice.showDialog();
+		db1.connect(choice.getDBName(), choice.getTableName(), choice.getAction());
+		System.out.println(choice.getDBName()+"\n"+choice.getTableName()+"\n"+choice.getAction());
 		System.out.print("Enter asset ID> ");
 		String id = in.next();
 		System.out.print("Enter purchase date (YYYY/MM/DD)> ");

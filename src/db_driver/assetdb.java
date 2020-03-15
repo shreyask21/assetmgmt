@@ -1,73 +1,58 @@
 package db_driver;
 
-import java.util.Scanner;
-
 import java.sql.*;
 
 public class assetdb {
 
 	private Connection sqlconnection;
-	private Connection tempconnection;
 	private Statement sqlstatement;
 	private ResultSet sqlresultset;
-	private String dbname;
-	private String tablename;
+	private String dbname, tablename, username, password;
 
 	/* Log in to SQL database */
-	public boolean login_db(String uname, String pass){
+	public boolean checkCreds(final String uname, final String pass) {
+		/*Check if given user name and password are valid*/
 		try {
-			this.tempconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", uname, pass);
-			this.tempconnection.close();
+			Connection tempconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", uname, pass);
+			tempconnection.close();
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	/* Generate new database */
-	public void connect(String username, String password) throws SQLException {
+	/*As the user name and password are checked from diffrent object we need a setter to copy them*/
+	public void setCreds(final String uname, final String pass) {
+		this.username=uname;
+		this.password=pass;
+	}
+	public void connect(final String database_name, final String table_name, boolean action) throws SQLException {
+		this.dbname = database_name;
+		this.tablename = table_name;
 		try {
-			Scanner in = new Scanner(System.in);
-			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", username,
-					password);
-			this.sqlstatement = this.sqlconnection.createStatement();
-			System.out.print("Enter new database name> ");
-			this.dbname = in.nextLine();
-			this.sqlstatement.executeUpdate("CREATE DATABASE " + this.dbname);
-			this.sqlstatement.executeUpdate("USE " + this.dbname);
-			System.out.print("Enter new table name> ");
-			this.tablename = in.nextLine();
-			this.sqlstatement.executeUpdate("CREATE TABLE " + this.tablename
-					+ " (tag_id VARCHAR(255), purchase_date DATE, asset_type VARCHAR(255), price INT NOT NULL, status VARCHAR(255) )");
-			System.out.println("New database generated...");
-			System.out.println("Connecting to new database...");
-			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", username,
-					password);
-			this.sqlstatement = this.sqlconnection.createStatement();
+			if (action) {
+				this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", this.username, this.password);
+				this.sqlstatement = this.sqlconnection.createStatement();
+				this.sqlstatement.executeUpdate("CREATE DATABASE " + this.dbname);
+				this.sqlstatement.executeUpdate("USE " + this.dbname);
+				this.sqlstatement.executeUpdate("CREATE TABLE " + this.tablename
+						+ " (tag_id VARCHAR(255), purchase_date DATE, asset_type VARCHAR(255), price INT NOT NULL, status VARCHAR(255) )");
+				System.out.println("New database generated...");
+				System.out.println("Connecting to new database...");
 
+				System.out.println("Connected to the new datbase...");
+			} else {
+				this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + this.dbname, this.username,
+						this.password);
+				System.out.println("Connected to database...");
+			}
 		} catch (final Exception e) {
 			throw e;
 		}
-		System.out.println("Connected to the new datbase...");
 	}
 
-	/* Connect to existing database */
-	public void connect(final String database_name, final String table_name,String username, String password) throws SQLException {
-		try {
-			this.sqlconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + this.dbname, username,
-					password);
-			this.dbname = database_name;
-			this.tablename = table_name;
-			this.sqlstatement = this.sqlconnection.createStatement();
-			this.sqlstatement.executeUpdate("USE " + this.dbname);
-
-		} catch (final Exception e) {
-			throw e;
-		}
-		System.out.println("Connected to datbase...");
-	}
-
-	public void write_entry(String id, String date, String type, int price, String status) {
+	public void write_entry(final String id, final String date, final String type, final int price,
+			final String status) {
 		try {
 			String sql = "INSERT INTO " + this.tablename
 					+ " (tag_id, purchase_date, asset_type, price, status) VALUES('" + id + "','" + date + "','" + type

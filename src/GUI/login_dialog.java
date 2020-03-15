@@ -11,7 +11,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class login_ui extends JDialog {
+public class login_dialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textbox_username;
@@ -20,11 +20,11 @@ public class login_ui extends JDialog {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	
-	public login_ui() {
+	public login_dialog() {
 		this.setModal(true);
 		this.setTitle("Login Prompt");
 		assetdb db = new assetdb();
-		setBounds(100, 100, 400, 300);
+		setBounds(400, 300, 400, 300);
 		getContentPane().setLayout(null);
 		{
 			textbox_username = new JTextField();
@@ -41,13 +41,13 @@ public class login_ui extends JDialog {
 			JButton btnNewButton = new JButton("SUMBIT");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (db.login_db(getUsername(), getPassword())) {
-						JOptionPane.showMessageDialog(login_ui.this,
+					if (db.checkCreds(getUsername(), getPassword())) {
+						JOptionPane.showMessageDialog(login_dialog.this,
 								"Hi " + getUsername() + "! You have successfully logged in.", "Login",
 								JOptionPane.INFORMATION_MESSAGE);
 						dispose();
 					} else {
-						JOptionPane.showMessageDialog(login_ui.this, "Invalid username or password", "Login",
+						JOptionPane.showMessageDialog(login_dialog.this, "Invalid username or password", "Login",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -82,7 +82,7 @@ public class login_ui extends JDialog {
 		return new String(textbox_password.getPassword());
 	}
 
-	public void login() {
+	public void showDialog() {
 		this.setVisible(true);
 	}
 }
