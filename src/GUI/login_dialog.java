@@ -60,14 +60,11 @@ public class login_dialog extends JDialog {
 		getContentPane().add(submitbtn);
 		submitbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (db.checkCreds(getUsername(), getPassword())) {
-					JOptionPane.showMessageDialog(login_dialog.this,
-							"Hi " + getUsername() + "! You have successfully logged in.", "Login",
-							JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-				} else {
+				if (!db.checkCreds(getUsername(), getPassword())) {
 					JOptionPane.showMessageDialog(login_dialog.this, "Invalid username or password", "Login",
 							JOptionPane.ERROR_MESSAGE);
+				} else {
+					dispose();
 				}
 			}
 		});

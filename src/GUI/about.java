@@ -22,12 +22,12 @@ public class about extends JDialog {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		getContentPane().setLayout(null);
-		JLabel L = new JLabel(new ImageIcon(this.getClass().getClassLoader().getResource("resources/about.png")));
+		JLabel L = new JLabel(new ImageIcon(this.getClass().getClassLoader().getResource("about.png")));
 		L.setHorizontalAlignment(SwingConstants.CENTER);
 		L.setBounds(0, 0, 500, 500);
 		getContentPane().add(L);
 
-		JButton gitbtn = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("resources/git.png")));
+		JButton gitbtn = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("git.png")));
 		gitbtn.setBackground(Color.WHITE);
 		gitbtn.setBounds(208, 511, 100, 40);
 		getContentPane().add(gitbtn);

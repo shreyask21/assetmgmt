@@ -38,7 +38,6 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		this.setModal(true);
 		this.setTitle("Choose What To Do...");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
 		int y = (int) ((dimension.getHeight() - getHeight()) / 2);

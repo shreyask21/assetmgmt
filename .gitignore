@@ -17,3 +17,5 @@ tmp/
 local.properties
 .loadpath
 .factorypath
+.classpath
+*.jar
