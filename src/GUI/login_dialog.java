@@ -1,6 +1,7 @@
 package GUI;
 
 import db_driver.assetdb;
+import GUI.about;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -9,10 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 
 /*Shows the login dialog*/
 public class login_dialog extends JDialog {
@@ -23,15 +26,23 @@ public class login_dialog extends JDialog {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
+	private JButton aboutbtn;
 
 	/* Generates layout */
 	public login_dialog() {
 		/* Create layout */
-		this.setModal(true);
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		setResizable(false);
 		this.setTitle("Login Prompt");
+		this.setAlwaysOnTop(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		assetdb db = new assetdb();
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
 		setBounds(400, 300, 400, 300);
+		setLocation(x, y);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		textbox_username = new JTextField();
 		textbox_username.setBounds(140, 89, 120, 25);
@@ -85,6 +96,19 @@ public class login_dialog extends JDialog {
 		});
 		exitbtn.setBounds(140, 194, 120, 25);
 		getContentPane().add(exitbtn);
+		
+		aboutbtn = new JButton("About");
+		aboutbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				about info = new about();
+				info.display();
+			}
+		});
+		aboutbtn.setForeground(Color.DARK_GRAY);
+		aboutbtn.setBackground(Color.WHITE);
+		aboutbtn.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		aboutbtn.setBounds(316, 238, 68, 23);
+		getContentPane().add(aboutbtn);
 
 	}
 

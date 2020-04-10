@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.Toolkit;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
@@ -17,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 
 /*Shows the database creation option dialog*/
 public class createdb_dialog extends JDialog implements ActionListener {
@@ -36,7 +39,12 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		this.setModal(true);
 		this.setTitle("Choose What To Do...");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
 		setBounds(400, 300, 400, 300);
+		setLocation(x, y);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -52,7 +60,7 @@ public class createdb_dialog extends JDialog implements ActionListener {
 
 		JRadioButton radio_olddb = new JRadioButton("Use Existing database");
 		radio_olddb.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		radio_olddb.setBounds(210, 20, 147, 21);
+		radio_olddb.setBounds(210, 20, 168, 21);
 		contentPanel.add(radio_olddb);
 		radio_olddb.setActionCommand("old");
 

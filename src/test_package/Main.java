@@ -36,6 +36,7 @@ public class Main {
 		/********************************************************************/
 		
 		/*				TODO: Create GUI dialog to add entries				*/
+		/*
 		System.out.print("Enter asset ID> ");
 		String id = in.next();
 		System.out.print("Enter purchase date (YYYY/MM/DD)> ");
@@ -48,6 +49,7 @@ public class Main {
 		String status = in.next();
 		
 		db1.write_entry(id, date, type, price, status);	//Write given entry to database
+		*/
 		/********************************************************************/
 		
 		/*				TODO: Create GUI dialog to display entries			*/
