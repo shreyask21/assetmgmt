@@ -1,7 +1,6 @@
 package GUI;
 
 import db_driver.assetdb;
-import GUI.about;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -26,15 +25,14 @@ public class login_dialog extends JDialog {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
-	private JButton aboutbtn;
 
 	/* Generates layout */
 	public login_dialog() {
 		/* Create layout */
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setResizable(false);
-		this.setTitle("Login Prompt");
-		this.setAlwaysOnTop(false);
+		setTitle("Please Login");
+		setAlwaysOnTop(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		assetdb db = new assetdb();
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -82,7 +80,7 @@ public class login_dialog extends JDialog {
 		lblNewLabel_2 = new JLabel("Password");
 		lblNewLabel_2.setBounds(70, 130, 60, 13);
 		getContentPane().add(lblNewLabel_2);
-		
+
 		JButton exitbtn = new JButton("EXIT");
 		exitbtn.setForeground(new Color(255, 0, 0));
 		exitbtn.addActionListener(new ActionListener() {
@@ -93,19 +91,6 @@ public class login_dialog extends JDialog {
 		});
 		exitbtn.setBounds(140, 194, 120, 25);
 		getContentPane().add(exitbtn);
-		
-		aboutbtn = new JButton("About");
-		aboutbtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				about info = new about();
-				info.display();
-			}
-		});
-		aboutbtn.setForeground(Color.DARK_GRAY);
-		aboutbtn.setBackground(Color.WHITE);
-		aboutbtn.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		aboutbtn.setBounds(316, 238, 68, 23);
-		getContentPane().add(aboutbtn);
 
 	}
 

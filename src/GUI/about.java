@@ -9,7 +9,7 @@ public class about extends JDialog {
 	private static final long serialVersionUID = 5381052862136001506L;
 
 	public about() {
-		setModalityType(ModalityType.APPLICATION_MODAL);
+		setModal(true);
 		setResizable(false);
 		setTitle("About Project");
 		setBackground(Color.WHITE);
@@ -37,6 +37,7 @@ public class about extends JDialog {
 				if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
 					try {
 						desktop.browse(new URL("https://github.com/shreyask21/assetmgmt/").toURI());
+						dispose();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -46,7 +47,7 @@ public class about extends JDialog {
 
 	}
 
-	public void display() {
+	public void showDialog() {
 		this.setVisible(true);
 	}
 

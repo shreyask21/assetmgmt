@@ -11,12 +11,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.Toolkit;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,7 +30,7 @@ public class createdb_dialog extends JDialog implements ActionListener {
 	private String username, password;
 
 	/* Generates layout */
-	public createdb_dialog() throws SQLException {
+	public createdb_dialog() {
 		assetdb db = new assetdb();
 		/* Create layout */
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -48,7 +46,6 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-
 		/* Create radio buttons */
 		JRadioButton radio_newdb = new JRadioButton("Create New Database");
 		radio_newdb.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -82,7 +79,7 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		tbox_tablename.setColumns(10);
 		tbox_tablename.setBounds(135, 123, 130, 25);
 		contentPanel.add(tbox_tablename);
-		
+
 		/* Create labels for text boxes */
 		JLabel lblNewLabel = new JLabel("Database Name");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -98,7 +95,7 @@ public class createdb_dialog extends JDialog implements ActionListener {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		}
-		
+
 		JButton exitbtn = new JButton("EXIT");
 		exitbtn.setForeground(new Color(255, 0, 0));
 		exitbtn.setBounds(135, 193, 130, 25);
@@ -106,11 +103,10 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		exitbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				System.exit(ABORT);
+				System.exit(0);
 			}
 		});
-		
-		
+
 		JButton okbtn = new JButton("OK");
 		okbtn.setForeground(new Color(0, 128, 0));
 		okbtn.setBounds(135, 158, 130, 25);
@@ -118,8 +114,13 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		okbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (action) {
-					//close dialog if its new database
-					dispose();
+					if (!db.checkDBexisting(createdb_dialog.this.username, createdb_dialog.this.password, getDBName(),
+							getTableName())) {
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(createdb_dialog.this, "Database already exists", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				} else {
 					if (db.checkDBexisting(createdb_dialog.this.username, createdb_dialog.this.password, getDBName(),
 							getTableName())) {
@@ -131,8 +132,7 @@ public class createdb_dialog extends JDialog implements ActionListener {
 				}
 			}
 		});
-		
-		
+
 	}
 
 	/* Setter for radio buttons */
@@ -150,14 +150,6 @@ public class createdb_dialog extends JDialog implements ActionListener {
 		this.username = usrn;
 		this.password = psw;
 		this.setVisible(true);
-	}
-
-	public ModalityType getSetModal() {
-		return getModalityType();
-	}
-
-	public void setSetModal(ModalityType modalityType) {
-		setModalityType(modalityType);
 	}
 
 	/* Returns the action type. true-> new database, false -> existing */
