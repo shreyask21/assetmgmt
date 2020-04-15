@@ -7,6 +7,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.19.jar"/>
+	<classpathentry kind="lib" path="lib/myqsl_connector/mysql-connector-java-8.0.19.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/poi-4.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/poi-ooxml-4.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/xmlbeans-3.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/commons-compress-1.20.jar"/>
+	<classpathentry kind="lib" path="lib/apache_poi/poi-ooxml-schemas-4.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

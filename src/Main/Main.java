@@ -1,13 +1,13 @@
 package Main;
 
-import GUI.MainUI;
-import db_driver.assetdb;
+import GUI.Main_Menu_Dialog;
+import db_driver.Assetdb;
 
 public class Main {
 
 	public static void main(String[] args) {
-		assetdb db = new assetdb();
-		MainUI ui = new MainUI();
+		Assetdb db = new Assetdb();
+		Main_Menu_Dialog ui = new Main_Menu_Dialog();
 		db.init();
 		do {
 			ui.showDialog();
@@ -19,6 +19,9 @@ public class Main {
 				break;
 			case 1:
 				db.display_db();
+				break;
+			case 6:
+				db.export_all();
 				break;
 			}
 		} while (ui.Choice != 0);
