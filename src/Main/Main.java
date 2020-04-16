@@ -8,7 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		Assetdb db = new Assetdb();
 		Main_Menu_Dialog ui = new Main_Menu_Dialog();
-		db.init();
+		db.init("root", "root", "abc", "def");
+		// db.init();
 		do {
 			ui.showDialog();
 			switch (ui.Choice) {
@@ -20,12 +21,14 @@ public class Main {
 			case 1:
 				db.display_db();
 				break;
+			case 4:
+				db.search();
+				break;
 			case 6:
 				db.export_all();
 				break;
 			}
 		} while (ui.Choice != 0);
-
 	}
 
 }

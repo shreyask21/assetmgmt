@@ -7,27 +7,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
-/*	Import GUI package	*/
+/*	Import GUI packages	*/
 import GUI.Createdb_Dialog;
 import GUI.Display_Table_Dialog;
 import GUI.Error_Dialog;
 import GUI.Login_Dialog;
+import GUI.Search_Dialog;
 import excel_export.ExcelExporter;
 
 /*Class to handle all SQL back-end*/
 public class Assetdb {
 
 	private String dbname, tablename, username, password;
+	private Scanner in = new Scanner(System.in);
 	/* Data members */
 	private Connection sqlconnection;
 	private Statement sqlstatement;
-
-	/********************************************************************/
 
 	/* Check if MySQL is installed and available */
 	private void checkConnection() {
@@ -43,10 +44,6 @@ public class Assetdb {
 		}
 	}
 
-	/********************************************************************/
-
-	/********************************************************************/
-
 	/* Check if given user name and password are valid */
 	public boolean checkCreds(final String uname, final String pass) {
 
@@ -58,8 +55,6 @@ public class Assetdb {
 			return false;
 		}
 	}
-
-	/********************************************************************/
 
 	/* Check if given database name and table name are valid */
 	public boolean checkDBexisting(final String uname, final String pass, final String db, final String tab) {
@@ -76,8 +71,6 @@ public class Assetdb {
 		}
 	}
 
-	/********************************************************************/
-
 	/* Close the SQL connection */
 	public void close_db() {
 		try {
@@ -86,8 +79,6 @@ public class Assetdb {
 			e.printStackTrace();
 		}
 	}
-
-	/********************************************************************/
 
 	/* Log in and generate a SQL connection to the given database */
 	public boolean connect(final String database_name, final String table_name, boolean action) {
@@ -113,7 +104,6 @@ public class Assetdb {
 							System.exit(0);
 						}
 					} else {
-						e.printStackTrace();
 						Error_Dialog.showError(e);
 					}
 				}
@@ -132,13 +122,26 @@ public class Assetdb {
 				return false;
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
 			Error_Dialog.showError(e);
 			return true;
 		}
 	}
 
-	/********************************************************************/
+	/* Delete particular entries */
+	public void delete_entries(ResultSet rs) {
+		try {
+			while (rs.next()) {
+				System.out.println("Do you want to delete this entry?");
+				System.out.print("Enter '1' to confirm delete operation> ");
+				if (in.nextInt() == 1) {
+					this.sqlconnection.createStatement()
+							.executeUpdate("DELETE FROM " + this.tablename + " WHERE Sr= " + rs.getInt("Sr"));
+				}
+			}
+		} catch (final Exception e) {
+			Error_Dialog.showError(e);
+		}
+	}
 
 	/* Display all the entries */
 	public void display_db() {
@@ -147,18 +150,18 @@ public class Assetdb {
 		table.display_table(rs, this.getRows(rs));
 	}
 
-	/********************************************************************/
+	/* Display entries in a ResultSet */
+	public void display_db(ResultSet rs) {
+		Display_Table_Dialog table = new Display_Table_Dialog();
+		table.display_table(rs, this.getRows(rs));
+	}
 
-	/* Write given entry to table */
+	/* Export all entries to excel file */
 	public void export_all() {
 		ExcelExporter excel = new ExcelExporter();
 		ResultSet rs = this.getEntries();
 		excel.export(rs, this.getRows(rs));
 	}
-
-	/********************************************************************/
-
-	/********************************************************************/
 
 	/* Get all the entries */
 	public ResultSet getEntries() {
@@ -169,13 +172,35 @@ public class Assetdb {
 			this.sqlstatement.executeUpdate("USE " + this.dbname);
 			rs = this.sqlstatement.executeQuery("SELECT * FROM " + this.tablename);
 		} catch (final Exception e) {
-			e.printStackTrace();
 			Error_Dialog.showError(e);
 		}
 		return rs;
 	}
 
-	/********************************************************************/
+	/* Get particular entries */
+	public ResultSet getResultSet(String[] data) {
+		ResultSet rs = null;
+		String[] columnID = { "Sr", "ID", "Purchase_Date", "Type", "Price", "Status" };
+		boolean firstValue = true;
+		String query = "SELECT * FROM " + this.tablename;
+		for (int i = 0; i < data.length; i++) {
+			if (!(data[i].isBlank() || data[i] == null)) {
+				if (firstValue) {
+					query += " WHERE ";
+					firstValue = false;
+				} else {
+					query += " AND ";
+				}
+				query += " " + columnID[i] + " = '" + data[i] + "' ";
+			}
+		}
+		try {
+			rs = this.sqlconnection.createStatement().executeQuery(query);
+		} catch (Exception e) {
+			Error_Dialog.showError(e);
+		}
+		return rs;
+	}
 
 	/* Get number of rows in a ResultSet */
 	public int getRows(ResultSet rs) {
@@ -185,13 +210,10 @@ public class Assetdb {
 			count = rs.getRow();
 			rs.beforeFirst();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			Error_Dialog.showError(e);
 		}
 		return count;
 	}
-
-	/********************************************************************/
 
 	/* Initialize and connect to database */
 	public void init() {
@@ -211,7 +233,45 @@ public class Assetdb {
 		} while (this.connect(choice.getDBName(), choice.getTableName(), choice.getAction()));
 	}
 
-	/********************************************************************/
+	public void init(String uname, String psw, String dbname, String tabname) {
+		this.checkConnection();
+		this.setCreds(uname, psw);
+		this.connect(dbname, tabname, false);
+	}
+
+	/* Modify particular entries */
+	public void modify_entries(ResultSet rs) {
+		String name, subject;
+		int roll, marks;
+		try {
+
+			while (rs.next()) {
+				System.out.println("Do you want to modify this entry?");
+				System.out.print("Enter '1' to confirm modify operation> ");
+				if (in.nextInt() == 1) {
+					System.out.print("Enter student name> ");
+					name = in.next();
+					System.out.print("Enter student roll number> ");
+					roll = in.nextInt();
+					System.out.print("Enter subject name> ");
+					subject = in.next();
+					System.out.print("Enter subject marks> ");
+					marks = in.nextInt();
+					String sql = "UPDATE " + this.tablename + " SET Name= '" + name + "', Roll_Number= " + roll
+							+ ", Subject= '" + subject + "', Marks= " + marks + " WHERE Sr=" + rs.getInt("Sr");
+					this.sqlconnection.createStatement().executeUpdate(sql);
+				}
+			}
+		} catch (final Exception e) {
+			Error_Dialog.showError(e);
+		}
+	}
+
+	/* Search entries */
+	public void search() {
+		Search_Dialog srch = new Search_Dialog(this);
+		srch.showDialog();
+	}
 
 	/*
 	 * As the user name and password are checked from different object we need a
@@ -227,16 +287,14 @@ public class Assetdb {
 		}
 	}
 
-	/********************************************************************/
-
 	/* Write given entry to table */
 	public void write_entry(final String id, final String date, final String type, final int Price,
 			final String Status) {
 		try {
 			this.sqlstatement.executeUpdate("USE " + this.dbname);
-			String query = "INSERT INTO " + this.tablename + "  ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO " + this.tablename
+					+ " (ID, Purchase_Date, Type, Price, Status) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement stmt = this.sqlconnection.prepareStatement(query);
-			this.sqlconnection.createStatement().executeUpdate("USE " + this.dbname);
 			stmt.setString(1, id);
 			stmt.setString(2, date);
 			stmt.setString(3, type);
@@ -244,7 +302,6 @@ public class Assetdb {
 			stmt.setString(5, Status);
 			stmt.execute();
 		} catch (final Exception e) {
-			e.printStackTrace();
 			Error_Dialog.showError(e);
 		}
 	}

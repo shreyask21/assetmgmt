@@ -27,7 +27,7 @@ public class Createdb_Dialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 718615945910521098L;
 	private boolean action = false; // Default: existing database
-	private final JPanel contentPanel = new JPanel();
+	private JPanel contentPanel = new JPanel();
 	private JTextField tbox_dbname;
 	private JTextField tbox_tablename;
 	private String username, password;

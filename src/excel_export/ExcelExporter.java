@@ -16,10 +16,12 @@ import GUI.Error_Dialog;
 public class ExcelExporter {
 	private String[] columnNames = { "Sr.", "Asset ID", "Purchase Date", "Asset Type", "Asset Price", "Asset Status" };
 	private String[][] data_rows;
-	private XSSFWorkbook workbook = new XSSFWorkbook();
-	private XSSFSheet sheet = workbook.createSheet("Assets");
+	private XSSFSheet sheet;
+	private XSSFWorkbook workbook;
 
 	public void export(ResultSet rs, int rows) {
+		workbook = new XSSFWorkbook();
+		sheet = workbook.createSheet("Assets");
 		this.data_rows = new String[rows][this.columnNames.length];
 		storeData(rs);
 		writeHeaderLine(sheet);
