@@ -16,8 +16,8 @@ import GUI.Error_Dialog;
 public class ExcelExporter {
 	private String[] columnNames = { "Sr.", "Asset ID", "Purchase Date", "Asset Type", "Asset Price", "Asset Status" };
 	private String[][] data_rows;
-	private XSSFSheet sheet = workbook.createSheet("Assets");
 	private XSSFWorkbook workbook = new XSSFWorkbook();
+	private XSSFSheet sheet = workbook.createSheet("Assets");
 
 	public void export(ResultSet rs, int rows) {
 		this.data_rows = new String[rows][this.columnNames.length];
