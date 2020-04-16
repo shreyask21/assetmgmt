@@ -7,6 +7,6 @@
 To collect, store, organize and manage the assets in industries or schools, colleges etc. using SQL database
 and design an accompanying software in Java to connect to it with easy to understand GUI for the user.
 
-## Software Used:
-* Java
-* MySQL
+## Requirements:
+* Java SE 14+
+* MySQL Server
