@@ -1,5 +1,6 @@
-/bin/db_driver/assetdb.class
-/bin/*.class
+bin/
+bin/db_driver/assetdb.class
+bin/*.class
 .mtj.tmp/
 *.class
 *.war
@@ -20,3 +21,5 @@ local.properties
 .loadpath
 .factorypath
 .classpath
+*.class
+bin/db_driver/assetdb.class
