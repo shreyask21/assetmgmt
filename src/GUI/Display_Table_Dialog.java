@@ -17,7 +17,7 @@ public class Display_Table_Dialog extends JDialog {
 
 	public Display_Table_Dialog() {
 		this.setTitle("Database Entries");
-		this.setModalityType(ModalityType.APPLICATION_MODAL);
+		setModal(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setAlwaysOnTop(false);

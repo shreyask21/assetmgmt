@@ -49,7 +49,7 @@ public class Search_Dialog extends JDialog {
 	public Search_Dialog(Assetdb dbobj) {
 		this.db = dbobj;
 		this.setTitle("Search Entries");
-		this.setModalityType(ModalityType.APPLICATION_MODAL);
+		setModal(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setAlwaysOnTop(false);

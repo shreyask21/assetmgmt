@@ -8,8 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		Assetdb db = new Assetdb();
 		Main_Menu_Dialog ui = new Main_Menu_Dialog();
-		db.init("root", "root", "abc", "def");
-		// db.init();
+		//db.init("root", "root", "abc", "def");
+		db.init();
 		do {
 			ui.showDialog();
 			switch (ui.Choice) {
