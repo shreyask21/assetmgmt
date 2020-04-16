@@ -102,13 +102,15 @@ public class Assetdb {
 					this.sqlstatement.executeUpdate("CREATE DATABASE " + this.dbname + ";");
 				} catch (SQLException e) {
 					if (e.getErrorCode() == 1007) {
-						int choice = JOptionPane.showConfirmDialog(null, "The Database '" + this.dbname
-								+ "' Already exists but the table '" + this.tablename
-								+ "' does not.\n\nPress OK to create new table in the existing database or press cancel to go back.",
-								"Confirmation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-						System.out.println(choice);
-						if (choice == JOptionPane.CANCEL_OPTION) {
+						int choice = JOptionPane.showOptionDialog(null,
+								"The Database '" + this.dbname + "' Already exists but the table '" + this.tablename
+										+ "' does not.",
+								"Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+								new String[] { "Create New Table", "Go Back", "Exit Program" }, "default");
+						if (choice == JOptionPane.NO_OPTION) {
 							return true;
+						} else if (choice == JOptionPane.CANCEL_OPTION) {
+							System.exit(0);
 						}
 					} else {
 						e.printStackTrace();
@@ -153,6 +155,7 @@ public class Assetdb {
 		ResultSet rs = this.getEntries();
 		excel.export(rs, this.getRows(rs));
 	}
+
 	/********************************************************************/
 
 	/********************************************************************/
