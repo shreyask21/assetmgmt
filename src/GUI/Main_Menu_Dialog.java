@@ -29,7 +29,7 @@ public class Main_Menu_Dialog extends JDialog {
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
 		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
-		setBounds(400, 300, 646, 450);
+		setBounds(400, 300, 655, 450);
 		setLocation(x, y);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);

@@ -146,14 +146,14 @@ public class Assetdb {
 	/* Display all the entries */
 	public void display_db() {
 		ResultSet rs = this.getEntries();
-		Display_Table_Dialog table = new Display_Table_Dialog();
-		table.display_table(rs, this.getRows(rs));
+		Display_Table_Dialog table = new Display_Table_Dialog(rs);
+		table.showDialog();
 	}
 
 	/* Display entries in a ResultSet */
 	public void display_db(ResultSet rs) {
-		Display_Table_Dialog table = new Display_Table_Dialog();
-		table.display_table(rs, this.getRows(rs));
+		Display_Table_Dialog table = new Display_Table_Dialog(rs);
+		table.showDialog();
 	}
 
 	/* Export all entries to excel file */

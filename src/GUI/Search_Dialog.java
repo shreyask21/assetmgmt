@@ -6,15 +6,19 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
 import db_driver.Assetdb;
 import excel_export.ExcelExporter;
@@ -39,11 +43,10 @@ public class Search_Dialog extends JDialog {
 	private JTextField IDTbox;
 	private JTextField pdateTbox;
 	private JTextField PriceTbox;
-	private ResultSet rs;
-	private String[] search;
+	private ResultSet set;
 	private JTextField SrTbox;
 	private JTextField StatusTbox;
-
+	private JTable table;
 	private JTextField TypeTbox;
 
 	public Search_Dialog(Assetdb dbobj) {
@@ -56,7 +59,7 @@ public class Search_Dialog extends JDialog {
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
 		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
-		this.setBounds(400, 300, 626, 160);
+		this.setBounds(400, 300, 626, 458);
 		this.setLocationRelativeTo(null);
 		this.setLocation(x, y);
 		this.setLocationRelativeTo(null);
@@ -135,22 +138,24 @@ public class Search_Dialog extends JDialog {
 		getContentPane().add(lblStatus);
 
 		JButton searchbtn = new JButton("Search");
-		searchbtn.setBounds(210, 84, 90, 23);
+		searchbtn.setBounds(110, 84, 120, 23);
 		getContentPane().add(searchbtn);
 
-		JButton ExportBtn = new JButton("Export");
-		ExportBtn.setBounds(310, 84, 90, 23);
+		JButton ExportBtn = new JButton("Export to Excel");
+		ExportBtn.setBounds(380, 84, 120, 23);
 		getContentPane().add(ExportBtn);
-		ExportBtn.setEnabled(false);
 
+		table = new JTable();
+		table.setBounds(10, 118, 590, 292);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 118, 590, 292);
+		getContentPane().add(scrollPane);
+
+		FillTable();
 		searchbtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Search_Dialog.this.setSearch();
-				Search_Dialog.this.rs = db.getResultSet(Search_Dialog.this.search);
-				Display_Table_Dialog disp = new Display_Table_Dialog();
-				disp.display_table(Search_Dialog.this.rs, db.getRows(Search_Dialog.this.rs));
-				ExportBtn.setEnabled(true);
+				Search_Dialog.this.FillTable();
 			}
 		});
 
@@ -158,26 +163,54 @@ public class Search_Dialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ExcelExporter excel = new ExcelExporter();
-				Search_Dialog.this.setSearch();
-				Search_Dialog.this.rs = db.getResultSet(Search_Dialog.this.search);
-				excel.export(rs, db.getRows(rs));
+				excel.export(set, db.getRows(set));
 			}
 		});
 
 	}
 
-	private void setSearch() {
-		this.search = new String[6];
-		this.search[0] = this.SrTbox.getText().trim();
-		this.search[1] = this.IDTbox.getText().trim();
-		if (checkValidDate(this.pdateTbox.getText().trim())) {
-			this.search[2] = this.pdateTbox.getText().trim();
-		} else {
-			this.search[2] = "";
+	private ResultSet copy(ResultSet rs) {
+		return rs;
+	}
+
+	public void FillTable() {
+		try {
+			ResultSet rs = db.getResultSet(this.getSearchString());
+			set = copy(rs);
+			DefaultTableModel tableModel = new DefaultTableModel();
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+			for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+				tableModel.addColumn(metaData.getColumnLabel(columnIndex));
+			}
+			Object[] row = new Object[columnCount];
+			while (rs.next()) {
+				for (int i = 0; i < columnCount; i++) {
+					row[i] = rs.getObject(i + 1);
+				}
+				tableModel.addRow(row);
+			}
+			table.setModel(tableModel);
+			table.setDefaultEditor(Object.class, null);
+			table.getTableHeader().setReorderingAllowed(false);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		this.search[3] = this.TypeTbox.getText().trim();
-		this.search[4] = this.PriceTbox.getText().trim();
-		this.search[5] = this.StatusTbox.getText().trim();
+	}
+
+	private String[] getSearchString() {
+		String[] searchString = new String[6];
+		searchString[0] = this.SrTbox.getText().trim();
+		searchString[1] = this.IDTbox.getText().trim();
+		if (checkValidDate(this.pdateTbox.getText().trim())) {
+			searchString[2] = this.pdateTbox.getText().trim();
+		} else {
+			searchString[2] = "";
+		}
+		searchString[3] = this.TypeTbox.getText().trim();
+		searchString[4] = this.PriceTbox.getText().trim();
+		searchString[5] = this.StatusTbox.getText().trim();
+		return searchString;
 	}
 
 	public void showDialog() {
