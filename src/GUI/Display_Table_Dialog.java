@@ -15,6 +15,7 @@ public class Display_Table_Dialog extends JDialog {
 	private static final long serialVersionUID = 70344042872926412L;
 
 	public Display_Table_Dialog(ResultSet rs) {
+		super((JDialog)null);
 		this.setTitle("Database Entries");
 		setModal(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

@@ -20,6 +20,7 @@ public class Main_Menu_Dialog extends JDialog {
 	public int Choice = 0;
 
 	public Main_Menu_Dialog() {
+		super((JDialog)null);
 		getContentPane().setBackground(Color.WHITE);
 		setModal(true);
 		setResizable(false);

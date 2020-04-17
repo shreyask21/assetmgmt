@@ -54,6 +54,7 @@ public class New_Entry_Dialog extends JDialog {
 	private JTextField TypeTbox;
 
 	public New_Entry_Dialog(Assetdb dbobj) {
+		super((JDialog)null);
 		this.db = dbobj;
 		this.setTitle("New Entry");
 		setModal(true);

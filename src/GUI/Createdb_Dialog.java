@@ -34,6 +34,7 @@ public class Createdb_Dialog extends JDialog implements ActionListener {
 
 	/* Generates layout */
 	public Createdb_Dialog() {
+		super((JDialog)null);
 		Assetdb db = new Assetdb();
 		/* Create layout */
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

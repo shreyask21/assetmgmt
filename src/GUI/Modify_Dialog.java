@@ -66,6 +66,7 @@ public class Modify_Dialog extends JDialog {
 	private JTextField TypeTboxSearch;
 
 	public Modify_Dialog(Assetdb dbobj) {
+		super((JDialog)null);
 		this.db = dbobj;
 		this.setTitle("Modify Entries");
 		setModal(true);

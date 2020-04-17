@@ -32,6 +32,7 @@ public class Login_Dialog extends JDialog {
 	/* Generates layout */
 	public Login_Dialog() {
 		/* Create layout */
+		super((JDialog)null);
 		setModal(true);
 		setResizable(false);
 		setTitle("Please Login");

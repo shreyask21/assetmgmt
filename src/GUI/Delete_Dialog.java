@@ -53,6 +53,7 @@ public class Delete_Dialog extends JDialog {
 	private JTextField TypeTbox;
 
 	public Delete_Dialog(Assetdb dbobj) {
+		super((JDialog)null);
 		this.db = dbobj;
 		this.setTitle("Delete Entries");
 		setModal(true);
