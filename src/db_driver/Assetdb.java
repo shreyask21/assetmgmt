@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -15,9 +14,12 @@ import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 /*	Import GUI packages	*/
 import GUI.Createdb_Dialog;
+import GUI.Delete_Dialog;
 import GUI.Display_Table_Dialog;
 import GUI.Error_Dialog;
 import GUI.Login_Dialog;
+import GUI.Modify_Dialog;
+import GUI.New_Entry_Dialog;
 import GUI.Search_Dialog;
 import excel_export.ExcelExporter;
 
@@ -25,10 +27,15 @@ import excel_export.ExcelExporter;
 public class Assetdb {
 
 	private String dbname, tablename, username, password;
-	private Scanner in = new Scanner(System.in);
 	/* Data members */
 	private Connection sqlconnection;
 	private Statement sqlstatement;
+
+	/* Add new entry */
+	public void add() {
+		New_Entry_Dialog dialog = new New_Entry_Dialog(this);
+		dialog.showDialog();
+	}
 
 	/* Check if MySQL is installed and available */
 	private void checkConnection() {
@@ -128,36 +135,35 @@ public class Assetdb {
 	}
 
 	/* Delete particular entries */
-	public void delete_entries(ResultSet rs) {
+	public void delete() {
+		Delete_Dialog dialog = new Delete_Dialog(this);
+		dialog.showDialog();
+	}
+
+	/* Delete particular entries */
+	public void deleteEntrySr(String Sr) {
 		try {
-			while (rs.next()) {
-				System.out.println("Do you want to delete this entry?");
-				System.out.print("Enter '1' to confirm delete operation> ");
-				if (in.nextInt() == 1) {
-					this.sqlconnection.createStatement()
-							.executeUpdate("DELETE FROM " + this.tablename + " WHERE Sr= " + rs.getInt("Sr"));
-				}
-			}
+			this.sqlconnection.createStatement().executeUpdate("DELETE FROM " + this.tablename + " WHERE Sr = " + Sr);
 		} catch (final Exception e) {
 			Error_Dialog.showError(e);
 		}
 	}
 
 	/* Display all the entries */
-	public void display_db() {
+	public void display() {
 		ResultSet rs = this.getEntries();
 		Display_Table_Dialog table = new Display_Table_Dialog(rs);
 		table.showDialog();
 	}
 
 	/* Display entries in a ResultSet */
-	public void display_db(ResultSet rs) {
+	public void display(ResultSet rs) {
 		Display_Table_Dialog table = new Display_Table_Dialog(rs);
 		table.showDialog();
 	}
 
 	/* Export all entries to excel file */
-	public void export_all() {
+	public void export() {
 		ExcelExporter excel = new ExcelExporter();
 		ResultSet rs = this.getEntries();
 		excel.export(rs, this.getRows(rs));
@@ -239,29 +245,26 @@ public class Assetdb {
 		this.connect(dbname, tabname, false);
 	}
 
-	/* Modify particular entries */
-	public void modify_entries(ResultSet rs) {
-		String name, subject;
-		int roll, marks;
-		try {
+	/* Modify entries */
+	public void modify() {
+		Modify_Dialog dialog = new Modify_Dialog(this);
+		dialog.showDialog();
 
-			while (rs.next()) {
-				System.out.println("Do you want to modify this entry?");
-				System.out.print("Enter '1' to confirm modify operation> ");
-				if (in.nextInt() == 1) {
-					System.out.print("Enter student name> ");
-					name = in.next();
-					System.out.print("Enter student roll number> ");
-					roll = in.nextInt();
-					System.out.print("Enter subject name> ");
-					subject = in.next();
-					System.out.print("Enter subject marks> ");
-					marks = in.nextInt();
-					String sql = "UPDATE " + this.tablename + " SET Name= '" + name + "', Roll_Number= " + roll
-							+ ", Subject= '" + subject + "', Marks= " + marks + " WHERE Sr=" + rs.getInt("Sr");
-					this.sqlconnection.createStatement().executeUpdate(sql);
-				}
-			}
+	}
+
+	/* Modify particular entry */
+	public void modify_entries(String[] data) {
+		try {
+			String query = "UPDATE " + this.tablename
+					+ " SET ID= ?, Purchase_Date= ?, Type= ?, Price= ?, Status= ? WHERE Sr= ?";
+			PreparedStatement stmt = this.sqlconnection.prepareStatement(query);
+			stmt.setString(1, data[1]);
+			stmt.setString(2, data[2]);
+			stmt.setString(3, data[3]);
+			stmt.setString(4, data[4]);
+			stmt.setString(5, data[5]);
+			stmt.setString(6, data[0]);
+			stmt.execute();
 		} catch (final Exception e) {
 			Error_Dialog.showError(e);
 		}
@@ -288,18 +291,17 @@ public class Assetdb {
 	}
 
 	/* Write given entry to table */
-	public void write_entry(final String id, final String date, final String type, final int Price,
-			final String Status) {
+	public void write_entry(String[] data) {
 		try {
 			this.sqlstatement.executeUpdate("USE " + this.dbname);
 			String query = "INSERT INTO " + this.tablename
 					+ " (ID, Purchase_Date, Type, Price, Status) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement stmt = this.sqlconnection.prepareStatement(query);
-			stmt.setString(1, id);
-			stmt.setString(2, date);
-			stmt.setString(3, type);
-			stmt.setInt(4, Price);
-			stmt.setString(5, Status);
+			stmt.setString(1, data[0]);
+			stmt.setString(2, data[1]);
+			stmt.setString(3, data[2]);
+			stmt.setString(4, data[3]);
+			stmt.setString(5, data[4]);
 			stmt.execute();
 		} catch (final Exception e) {
 			Error_Dialog.showError(e);

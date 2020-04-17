@@ -104,45 +104,47 @@ public class Search_Dialog extends JDialog {
 		JLabel lblNewLabel = new JLabel("Sr.");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel.setBounds(10, 12, 90, 14);
+		lblNewLabel.setBounds(10, 12, 90, 20);
 		getContentPane().add(lblNewLabel);
 
 		JLabel lblId = new JLabel("ID");
 		lblId.setHorizontalAlignment(SwingConstants.CENTER);
 		lblId.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblId.setBounds(110, 12, 90, 14);
+		lblId.setBounds(110, 12, 90, 20);
 		getContentPane().add(lblId);
 
 		JLabel lblPurchaseDate = new JLabel("Purchase Date");
 		lblPurchaseDate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPurchaseDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblPurchaseDate.setBounds(210, 12, 90, 14);
+		lblPurchaseDate.setBounds(210, 12, 90, 20);
 		getContentPane().add(lblPurchaseDate);
 
 		JLabel lblType = new JLabel("Type");
 		lblType.setHorizontalAlignment(SwingConstants.CENTER);
 		lblType.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblType.setBounds(310, 12, 90, 14);
+		lblType.setBounds(310, 12, 90, 20);
 		getContentPane().add(lblType);
 
 		JLabel lblPrice = new JLabel("Price");
 		lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrice.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblPrice.setBounds(410, 12, 90, 14);
+		lblPrice.setBounds(410, 12, 90, 20);
 		getContentPane().add(lblPrice);
 
 		JLabel lblStatus = new JLabel("Status");
 		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStatus.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblStatus.setBounds(510, 12, 90, 14);
+		lblStatus.setBounds(510, 12, 90, 20);
 		getContentPane().add(lblStatus);
 
 		JButton searchbtn = new JButton("Search");
-		searchbtn.setBounds(110, 84, 120, 23);
+		searchbtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		searchbtn.setBounds(10, 73, 190, 34);
 		getContentPane().add(searchbtn);
 
 		JButton ExportBtn = new JButton("Export to Excel");
-		ExportBtn.setBounds(380, 84, 120, 23);
+		ExportBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		ExportBtn.setBounds(410, 73, 190, 34);
 		getContentPane().add(ExportBtn);
 
 		table = new JTable();
@@ -173,7 +175,7 @@ public class Search_Dialog extends JDialog {
 		return rs;
 	}
 
-	public void FillTable() {
+	private void FillTable() {
 		try {
 			ResultSet rs = db.getResultSet(this.getSearchString());
 			set = copy(rs);
