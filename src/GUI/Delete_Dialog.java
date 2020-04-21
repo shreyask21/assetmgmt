@@ -258,7 +258,7 @@ public class Delete_Dialog extends JDialog {
 			table.getTableHeader().setReorderingAllowed(false);
 			ExportBtn.setEnabled(false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Error_Dialog.showError(e);
 		}
 	}
 

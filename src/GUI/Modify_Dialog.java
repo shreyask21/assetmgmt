@@ -418,7 +418,7 @@ public class Modify_Dialog extends JDialog {
 			table.setDefaultEditor(Object.class, null);
 			table.getTableHeader().setReorderingAllowed(false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Error_Dialog.showError(e);
 		}
 	}
 

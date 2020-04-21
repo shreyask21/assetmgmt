@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -50,7 +49,7 @@ public class About_Dialog extends JDialog {
 						desktop.browse(new URL("https://github.com/shreyask21/assetmgmt/").toURI());
 						dispose();
 					} catch (Exception ex) {
-						ex.printStackTrace();
+						Error_Dialog.showError(ex);
 					}
 				}
 			}

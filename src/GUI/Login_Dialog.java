@@ -50,7 +50,6 @@ public class Login_Dialog extends JDialog {
 		textbox_username.setBounds(140, 89, 120, 25);
 		getContentPane().add(textbox_username);
 		textbox_username.setColumns(10);
-
 		textbox_password = new JPasswordField();
 		textbox_password.setBounds(140, 124, 120, 25);
 		getContentPane().add(textbox_password);
